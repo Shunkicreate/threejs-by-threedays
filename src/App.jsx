@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import ThreeMain from './ThreeMain';
+import Clock from './Clock'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           Learn React
         </a>
       </header> */}
+      <Clock></Clock>
       <ThreeMain></ThreeMain>
     </div>
   );

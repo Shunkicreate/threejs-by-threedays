@@ -33,9 +33,9 @@ function App() {
           Learn React
         </a>
       </header> */}
-      <PlayAudio></PlayAudio>
+      {/* <PlayAudio></PlayAudio>
       <Clock></Clock>
-      <audio id="audio" controls loop src="./audio.mp3"></audio>
+      <audio id="audio" controls loop src="./audio.mp3"></audio> */}
       <ThreeMain></ThreeMain>
     </div>
   );

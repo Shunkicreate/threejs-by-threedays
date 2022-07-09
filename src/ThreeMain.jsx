@@ -1,33 +1,18 @@
-// Option 1: Import the entire three.js core library.
 import * as THREE from "three";
-// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-// import Clock from './Clock';
-// const controls = new OrbitControls( camera, renderer.domElement );
-// const scene = new THREE.Scene();
+import Particles from "./Particles";
+import React, { useRef, useEffect } from "react";
+import Camera from "./Camera";
+import Pointlightings from "./Pointlightings";
+// import Pointlightings from "./Pointlightings"
 
-// if ( WebGL.isWebGLAvailable() ) {
 
-// 	// Initiate function or other initializations here
-// 	animate();
-
-// } else {
-
-// 	const warning = WebGL.getWebGLErrorMessage();
-// 	document.getElementById( 'container' ).appendChild( warning );
-
-// }
 const ThreeMain = () => {
-  const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    1,
-    10000
-  );
-  camera.position.z = 1;
-  camera.position.x = 30;
-  // camera.position.y = 100;
-  // 原点方向を見つめる
-  camera.lookAt(new THREE.Vector3(0, 0, 0));
+  useEffect(() => {
+    const rnd = document.getElementById("threejsrenderer")
+    rnd.appendChild(renderer.domElement);
+  },);
+  const camera = Camera;
+  let rot = 0;
 
   const scene = new THREE.Scene();
 
@@ -35,9 +20,10 @@ const ThreeMain = () => {
   renderer.shadowMap.enabled = true;
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setAnimationLoop(animation);
-  document.body.appendChild(renderer.domElement);
 
-  const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
+  // document.body.appendChild(renderer.domElement);
+
+  const geometry = new THREE.TorusGeometry(100, 30, 160, 100);
   const material = new THREE.MeshStandardMaterial({
     color: 0x6699ff,
     roughness: 0.5,
@@ -45,16 +31,25 @@ const ThreeMain = () => {
 
   const mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
+
+  const particlesMesh = Particles
+  scene.add(particlesMesh)
+  scene.fog = new THREE.Fog(0x000000, 50, 10000);
+  
   // 平行光源
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
   directionalLight.position.set(1, 1, 1);
   scene.add(directionalLight);
-  // animation
-  //   const light = new THREE.DirectionalLight(0xffffff, 3);
-  //   scene.add(light);
   window.addEventListener("resize", onResize);
 
+  //点光源
+  const pointlightings = Pointlightings
+  pointlightings.forEach((value) =>{
+    scene.add(value)
+  })
+  // scene.add(Pointlightings)
   function onResize() {
+
     // サイズを取得
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -66,14 +61,53 @@ const ThreeMain = () => {
     // カメラのアスペクト比を正す
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
-    console.log('resize')
   }
+  const sphere = new THREE.SphereGeometry( 0.5, 16, 8 );
+  const light1 = new THREE.PointLight( 0xff0040, 2, 50 );
+  light1.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xff0040 } ) ) );
+  scene.add( light1 );
+
+  const light2 = new THREE.PointLight( 0x0040ff, 2, 50 );
+  light2.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x0040ff } ) ) );
+  scene.add( light2 );
+
+  const light3 = new THREE.PointLight( 0x80ff80, 2, 50 );
+  light3.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x80ff80 } ) ) );
+  scene.add( light3 );
+
+  const light4 = new THREE.PointLight( 0xffaa00, 2, 50 );
+  light4.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xffaa00 } ) ) );
+  scene.add( light4 );
+  
+  var y = 0
+  window.addEventListener('wheel', function(e){
+    y = e.wheelDeltaY
+    // console.log("横スクロール：" + window.scrollX);
+    // console.log("縦スクロール：" + window.scrollY);
+  });
+
+
+  //animathion process
   function animation(time) {
+    console.log(y)
     mesh.rotation.x = time / 1000;
     mesh.rotation.y = time / 500;
+    console.log(camera.position.x, camera.position.y, camera.position.z)
 
+    rot += 0.5; // 毎フレーム角度を0.5度ずつ足していく
+    // ラジアンに変換する
+    const radian = (rot * Math.PI) / 180;
+    // 角度に応じてカメラの位置を設定
+    camera.position.x = 1000 * Math.sin(radian);
+    camera.position.z = 1000 * Math.cos(radian);
+    // 原点方向を見つめる
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
     renderer.render(scene, camera);
   }
+  return (
+    <div id="threejsrenderer">
+    </div>
+  )
 };
 
 export default ThreeMain;

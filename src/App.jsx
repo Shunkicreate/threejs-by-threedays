@@ -3,6 +3,7 @@ import "./App.css";
 import ThreeMain from "./ThreeMain";
 import Clock from "./Clock";
 import React, { useEffect, useRef } from "react";
+import PlayAudio from "./PlayAudio";
 
 function App() {
   // let time = Clock
@@ -32,6 +33,7 @@ function App() {
           Learn React
         </a>
       </header> */}
+      <PlayAudio></PlayAudio>
       <Clock></Clock>
       <audio id="audio" controls loop src="./audio.mp3"></audio>
       <ThreeMain></ThreeMain>

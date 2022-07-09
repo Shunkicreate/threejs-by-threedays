@@ -1,9 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
-import ThreeMain from './ThreeMain';
-import Clock from './Clock'
+// import logo from './logo.svg';
+import "./App.css";
+import ThreeMain from "./ThreeMain";
+import Clock from "./Clock";
+import React, { useEffect, useRef } from "react";
 
 function App() {
+  // let time = Clock
+  // console.log(time)
+  const audioContext = useRef(null);
+  useEffect(() => {
+    audioContext.current = new AudioContext();
+  }, []);
+  document.addEventListener("click", audioPlay);
+  function audioPlay() {
+    document.getElementById("audio").play();
+    document.removeEventListener("click", audioPlay);
+  }
   return (
     <div className="App">
       {/* <header className="App-header">
@@ -21,6 +33,7 @@ function App() {
         </a>
       </header> */}
       <Clock></Clock>
+      <audio id="audio" controls loop src="./audio.mp3"></audio>
       <ThreeMain></ThreeMain>
     </div>
   );
